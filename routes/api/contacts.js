@@ -5,7 +5,7 @@ const { contactSchema } = require('../../schemas')
 const { controllerWrapper, validation } = require('../../middlewares')
 
 const { contacts: ctrl } = require('../../controllers/')
-console.log(ctrl)
+// console.log(ctrl)
 
 // 1. Получить список всех товаров
 // 2. Получить оодин товар по Id

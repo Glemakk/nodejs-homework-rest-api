@@ -18,7 +18,7 @@ const listContacts = async (req, res) => {
 
 const getContactById = async (req, res) => {
   const { contactId } = req.params
-  console.log(req.params)
+  // console.log(req.params)
   const result = await contactsOperations.getContactById(contactId)
   if (!result) {
     // instead of create new Error just use createError from http-error package
