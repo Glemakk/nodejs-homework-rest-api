@@ -1,5 +1,4 @@
 const { NotFound, BadRequest } = require('http-errors');
-// const contactsOperations = require('../oldModel/contacts');
 
 const { sendSuccessResponse } = require('../helpers');
 const {Contact} = require('../models')
@@ -7,7 +6,6 @@ const {Contact} = require('../models')
 const listContacts = async (req, res) => {
   const result = await Contact.find({}, "_id name email phone favorite")
   sendSuccessResponse(res, { result })
-
   //   const contacts = await contactsOperations.listContacts()
   //   res.json({
   //     message: 'success',
