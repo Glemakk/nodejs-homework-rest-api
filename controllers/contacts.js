@@ -1,4 +1,4 @@
-const { NotFound } = require('http-errors');
+const { NotFound, BadRequest } = require('http-errors');
 // const contactsOperations = require('../oldModel/contacts');
 
 const { sendSuccessResponse } = require('../helpers');
@@ -90,7 +90,7 @@ const updateFavorite = async (req, res) => {
   const { favorite } = req.body;
   const result = await Contact.findByIdAndUpdate(contactId, {favorite}, { new: true }); // new: true показывает, что вернуть в ответе обновленный объект
   if (!result) {
-    throw new NotFound(`Contact with id '${contactId}' not found`)
+    throw new BadRequest(`Contact with id '${contactId}' not found`)
   }
   sendSuccessResponse(res, { result });
 }
@@ -99,7 +99,7 @@ const removeContact = async (req, res) => {
   const { contactId } = req.params
   const result = await Contact.findByIdAndDelete(contactId)
   if (!result) {
-    throw new NotFound(`Contact with id '${contactId}' not found`)
+    throw new NotFound(`Missing field favorite with id '${contactId}' `)
   }
 
   sendSuccessResponse(res, { message: 'Contact successfully deleted' })
