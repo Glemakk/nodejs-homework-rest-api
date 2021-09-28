@@ -1,25 +1,19 @@
 const express = require('express')
 const logger = require('morgan')
 const cors = require('cors')
-const mongoose = require('mongoose')
-const dotenv = require('dotenv')
 
-dotenv.config()
+// const { Contact } = requre('./models')
 
+// const { DB_HOST } = process.env
 // console.log(process.env.DB_HOST)
-const { DB_HOST } = process.env
 
-mongoose
-  .connect(DB_HOST, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
-  .then(() => {
-    console.log('Database connection successful')
-  })
-  .catch((error) => {
-    console.log(error.message)
-  })
+// const newContact = {
+//   name: 'Aleksandr',
+//   email: 'Idiot@mail.com',
+//   phone: '123-123-123',
+//   favorite: false,
+// }
+
 
 const contactsRouter = require('./routes/api/contacts')
 
@@ -41,8 +35,8 @@ app.use((req, res) => {
 })
 
 app.use((err, req, res, next) => {
-  const { status = 500, message = 'Server error' } = err
-  res.status(status).json({ message })
-})
+  const { status = 500, message = 'Server error' } = err;
+  res.status(status).json({ message });
+});
 
 module.exports = app
