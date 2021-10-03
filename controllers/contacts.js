@@ -1,11 +1,11 @@
-const { NotFound } = require('http-errors')
-const contactsOperations = require('../model/contacts')
-const { sendSuccessResponse } = require('../helpers')
+const { NotFound, BadRequest } = require('http-errors');
+
+const { sendSuccessResponse } = require('../helpers');
+const {Contact} = require('../models')
 
 const listContacts = async (req, res) => {
-  const result = await contactsOperations.listContacts()
+  const result = await Contact.find({}, "_id name email phone favorite")
   sendSuccessResponse(res, { result })
-
   //   const contacts = await contactsOperations.listContacts()
   //   res.json({
   //     message: 'success',
@@ -18,8 +18,10 @@ const listContacts = async (req, res) => {
 
 const getContactById = async (req, res) => {
   const { contactId } = req.params
-  console.log(req.params)
-  const result = await contactsOperations.getContactById(contactId)
+  // console.log(req.params)
+  const result = await Contact.findById(contactId)
+  // findOne можно использовать по поиску, имени, имейла, кода - чего угодно. 
+  // const result = await Contact.findOne({_id: contactId}, "_id name email phone  favorite")
   if (!result) {
     // instead of create new Error just use createError from http-error package
     // const error = new Error(`Contact with id '${contactId}' not found`)
@@ -46,14 +48,7 @@ const getContactById = async (req, res) => {
 }
 
 const addContact = async (req, res) => {
-  //   const { error } = contactSchema.validate(req.body)
-  //   if (error) {
-  //     throw new BadRequest(error.message)
-  // const err = new Error(error.message)
-  // err.status = 400
-  // throw err
-  //   }
-  const result = await contactsOperations.addContact(req.body)
+  const result = await Contact.create(req.body);
   //   console.log(req.body)
   sendSuccessResponse(res, { result }, 201)
   //   res.status(201).json({
@@ -70,15 +65,15 @@ const updateContact = async (req, res) => {
   //   if (error) {
   //     throw new BadRequest(error.message)
   //   }
-  const { contactId } = req.params
-  const result = await contactsOperations.updateContact(contactId, req.body)
+  const { contactId } = req.params;
+  const result = await Contact.findByIdAndUpdate(contactId, req.body, { new: true }); // new: true показывает, что вернуть в ответе обновленный объект
   if (!result) {
     throw new NotFound(`Contact with id '${contactId}' not found`)
     // const error = new Error(`Contact with id=${contactId} not found`)
     // error.status = 404
     // throw error
   }
-  sendSuccessResponse(res, { result })
+  sendSuccessResponse(res, { result });
   //   res.json({
   //     result: 'success',
   //     code: 200,
@@ -88,11 +83,21 @@ const updateContact = async (req, res) => {
   //   })
 }
 
+const updateFavorite = async (req, res) => {
+  const { contactId } = req.params;
+  const { favorite } = req.body;
+  const result = await Contact.findByIdAndUpdate(contactId, {favorite}, { new: true }); // new: true показывает, что вернуть в ответе обновленный объект
+  if (!result) {
+    throw new BadRequest(`Contact with id '${contactId}' not found`)
+  }
+  sendSuccessResponse(res, { result });
+}
+
 const removeContact = async (req, res) => {
   const { contactId } = req.params
-  const result = await contactsOperations.removeContact(contactId)
+  const result = await Contact.findByIdAndDelete(contactId)
   if (!result) {
-    throw new NotFound(`Contact with id '${contactId}' not found`)
+    throw new NotFound(`Missing field favorite with id '${contactId}' `)
   }
 
   sendSuccessResponse(res, { message: 'Contact successfully deleted' })
@@ -111,4 +116,5 @@ module.exports = {
   addContact,
   updateContact,
   removeContact,
+  updateFavorite
 }
