@@ -1,9 +1,9 @@
 const sendSuccessResponse = (res, data, status = 200) => {
   res.status(status).json({
-    status: 'success',
+    status: "success",
     code: status,
-    data,
-  })
+    data
+  });
 }
 
 module.exports = sendSuccessResponse
