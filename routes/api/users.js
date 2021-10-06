@@ -21,5 +21,5 @@ router.post("/login", validation(joiSchema), controllerWrapper(ctrl.login));
 router.post("/logout", authenticate, controllerWrapper(ctrl.logout));
 // router.get("/logout") - тут не будет никакого тела запроса, поэтому обычно get (сдай пропуск т.е. token)
 
-router.get("/current", controllerWrapper(ctrl.current));
+router.get("/current", authenticate, controllerWrapper(ctrl.current));
 module.exports = router;

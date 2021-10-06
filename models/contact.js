@@ -1,4 +1,4 @@
-const { Schema, model } = require('mongoose')
+const { Schema, model, SchemaTypes } = require('mongoose')
 const Joi = require('joi')
 
 const PhoneRegExp = /^\([0-9]{3}\)\s[0-9]{3}-[0-9]{4}$/
@@ -28,8 +28,12 @@ const contactSchema = Schema({
     type: Boolean,
     default: false,
   },
+  owner: {
+      type: SchemaTypes.ObjectId,
+      ref: 'user',
+    }
 },
-  { versionKey: false, timestamps: true, retainKeyOrder: true },
+  { versionKey: false, timestamps: true/*, retainKeyOrder: true*/ },
 );
 
 const JoicontactSchema = Joi.object({
@@ -37,6 +41,8 @@ const JoicontactSchema = Joi.object({
   email: Joi.string().min(4).pattern(EmailRegExp).required(),
   phone: Joi.string().min(6).pattern(PhoneRegExp).required(),
   favorite: Joi.boolean(),
+
+
 });
 
 const updateFavoriteJoiSchema = Joi.object({
