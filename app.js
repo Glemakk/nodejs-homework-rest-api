@@ -2,20 +2,8 @@ const express = require('express')
 const logger = require('morgan')
 const cors = require('cors')
 
-// const { Contact } = requre('./models')
-
-// const { DB_HOST } = process.env
-// console.log(process.env.DB_HOST)
-
-// const newContact = {
-//   name: 'Aleksandr',
-//   email: 'Idiot@mail.com',
-//   phone: '123-123-123',
-//   favorite: false,
-// }
-
-
 const contactsRouter = require('./routes/api/contacts')
+const usersRouter = require('./routes/api/users')
 
 const app = express()
 
@@ -26,17 +14,23 @@ app.use(cors())
 app.use(express.json())
 
 app.use('/api/contacts', contactsRouter)
+app.use('/users', usersRouter)
 
 app.use((req, res) => {
   res.status(404).json({
     status: 'error',
+    code: 404,
     message: 'Not found',
   })
 })
 
 app.use((err, req, res, next) => {
   const { status = 500, message = 'Server error' } = err;
-  res.status(status).json({ message });
+  res.status(status).json({
+    status: "error",
+    code: status,
+    message
+  });
 });
 
 module.exports = app

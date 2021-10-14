@@ -4,8 +4,8 @@ const { sendSuccessResponse } = require('../helpers');
 const {Contact} = require('../models')
 
 const listContacts = async (req, res) => {
-  const result = await Contact.find({}, "_id name email phone favorite")
-  sendSuccessResponse(res, { result })
+  const result = await Contact.find({}, "_id name email phone favorite");
+  sendSuccessResponse(res, { result });
   //   const contacts = await contactsOperations.listContacts()
   //   res.json({
   //     message: 'success',
@@ -14,11 +14,11 @@ const listContacts = async (req, res) => {
   //       result: contacts,
   //     },
   //   })
-}
+};
 
 const getContactById = async (req, res) => {
   const { contactId } = req.params
-  // console.log(req.params)
+  console.log(req.params)
   const result = await Contact.findById(contactId)
   // findOne можно использовать по поиску, имени, имейла, кода - чего угодно. 
   // const result = await Contact.findOne({_id: contactId}, "_id name email phone  favorite")
@@ -48,8 +48,11 @@ const getContactById = async (req, res) => {
 }
 
 const addContact = async (req, res) => {
-  const result = await Contact.create(req.body);
-  //   console.log(req.body)
+  const newContact = { ...req.body, owner: req.user._id };
+  // без owner
+  // const result = await Contact.create(req.body);
+  const result = await Contact.create(newContact);
+    console.log(newContact)
   sendSuccessResponse(res, { result }, 201)
   //   res.status(201).json({
   //     status: 'success',
