@@ -1,10 +1,11 @@
 const express = require("express");
 
 const { joiSchema } = require('../../models/user');
-const { controllerWrapper, validation, authenticate } = require('../../middlewares')
+const { controllerWrapper, validation, authenticate, upload } = require('../../middlewares')
 const { usersController: ctrl } = require('../../controllers');
 
 const router = express.Router();
+// console.log(ctrl)
 
 /*
 1. Регистрация нового пользователя
@@ -16,7 +17,7 @@ const router = express.Router();
 // gполный путь полуться /users/signup
 router.post("/signup", validation(joiSchema), controllerWrapper(ctrl.signup));
 
-router.patch("/avatars", )
+router.patch("/avatars", authenticate, upload.single('avatar'), controllerWrapper(ctrl.uploadAvatars));
 
 router.post("/login", validation(joiSchema), controllerWrapper(ctrl.login));
 
