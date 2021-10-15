@@ -16,6 +16,8 @@ const router = express.Router();
 // gполный путь полуться /users/signup
 router.post("/signup", validation(joiSchema), controllerWrapper(ctrl.signup));
 
+router.patch("/avatars", )
+
 router.post("/login", validation(joiSchema), controllerWrapper(ctrl.login));
 
 router.post("/logout", authenticate, controllerWrapper(ctrl.logout));
