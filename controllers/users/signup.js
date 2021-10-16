@@ -1,7 +1,7 @@
 const { Conflict } = require('http-errors');
 // const bcrypt = require("bcryptjs")
-
 const { User } = require('../../models');
+const gravatar = require('gravatar');
 
 const signup = async (req, res) => {
     const { email, password } = req.body;
@@ -16,10 +16,13 @@ const signup = async (req, res) => {
         // });
         // return;
     }
+
+    var avatar = gravatar.url(email, {s: '250', d: 'robohash'}, true);
     const newUser = new User({ email });
     //после объявления переменной - newUser это объект у кот-го есть св-во email
     // newUser = {email}
     newUser.setPassword(password);
+    newUser.setAvatar(avatar);
     //после объявления newUser.setPassword(password) - newUser это объект у кот-го есть св-во email и password
     // newUser = {email}
     await newUser.save(); //метод save - сохранили в базу
