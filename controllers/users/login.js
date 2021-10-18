@@ -8,10 +8,13 @@ const { SECRET_KEY } = process.env;
 
 const login = async (req, res) => {
     const { email, password } = req.body;
-    const user = await User.findOne({ email });
+    const user = await User.findOne({ email }, "_id email password verify");
     // универсально и для большей безопасности
     if (!user || !user.comparePassword(password)) {
-        throw new BadRequest('Invalid email or password');
+        throw new BadRequest('Invalid email, password or email not verify');
+    }
+    if (!user.verify) {
+        throw new BadRequest('Email not verify');
     }
 
     // if (!user) {
